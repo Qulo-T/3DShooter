@@ -5,14 +5,19 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private GameObject player;
+    private Rigidbody rb;
 
     public int speedWalk;
     private int speed;
+    public float jumpForce;
+    public bool isGround;
 
-    void Start()
+    void Awake()
     {
         player = (GameObject)this.gameObject;
+        rb = gameObject.GetComponent<Rigidbody>();
         speed = speedWalk;
+        
     }
 
     // Update is called once per frame
@@ -46,5 +51,15 @@ public class PlayerMovement : MonoBehaviour
         {
             player.transform.position += player.transform.right * speedWalk * Time.deltaTime;
         }
+        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+        {
+            isGround = false;
+            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision) //при необходимости прописать условие, что за коллвйдер вошел
+    {
+        isGround = true;
     }
 }
