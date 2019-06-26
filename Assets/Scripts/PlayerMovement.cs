@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private int speed;
     public float jumpForce;
     public bool isGround;
+    public bool isCrouch;
     private Animator anim;
 
     void Awake()
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     {
 
         Run();
+        Crouch();
         MoveForward();
         MoveRight();
         Jump();
@@ -35,20 +37,32 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MoveForward()
     {
-        if (Input.GetKey(KeyCode.W))
+        float mf;
+        if (isCrouch)
         {
-            player.transform.position += player.transform.forward * speed * Time.deltaTime;
-            anim.SetBool("Walk", true);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            player.transform.position -= player.transform.forward * speedWalk * Time.deltaTime;
-            anim.SetBool("Walk", true);
+            mf = 0.5f;
         }
         else
         {
-            anim.ResetTrigger("Walk");
-            anim.SetBool("Walk", false);
+            mf = 1;
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            anim.SetBool("www", true);
+            player.transform.position += player.transform.forward * speed *mf * Time.deltaTime;
+           
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            anim.SetBool("www", true);
+            player.transform.position -= player.transform.forward * speedWalk/2 * Time.deltaTime;
+            
+        }
+        else
+        {
+           
+            anim.SetBool("www", false);
         }
     }
 
@@ -57,10 +71,16 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             player.transform.position -= player.transform.right * speedWalk * Time.deltaTime;
+            anim.SetBool("www", true);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             player.transform.position += player.transform.right * speedWalk * Time.deltaTime;
+            anim.SetBool("www", true);
+        }
+        else
+        {
+          //  anim.SetBool("www", false);
         }
     }
     private void Jump()
@@ -69,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isGround)
             {
+                anim.SetBool("Jump", true);
                 isGround = false;
                 rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             }
@@ -85,15 +106,30 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
+           
             speed = speedWalk;
             anim.SetBool("Run", false);
             anim.ResetTrigger("Run");
         }
 
     }
+    private void Crouch()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            isCrouch = true;
+            anim.SetBool("Crouch", true);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            isCrouch = false;
+            anim.SetBool("Crouch", false);
+        }
+    }
 
     private void OnCollisionEnter(Collision collision) //при необходимости прописать условие, что за коллвйдер вошел
     {
         isGround = true;
+        anim.SetBool("Jump", !isGround);
     }
 }

@@ -1036,6 +1036,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1389786737660488, guid: 12905ec7ab033e74a8e4412fc6e26d4a, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4173461022829282, guid: 12905ec7ab033e74a8e4412fc6e26d4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1161,10 +1165,6 @@ PrefabInstance:
     - target: {fileID: 4753921144855864, guid: 12905ec7ab033e74a8e4412fc6e26d4a, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1389786737660488, guid: 12905ec7ab033e74a8e4412fc6e26d4a, type: 3}
-      propertyPath: m_Layer
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1753596471243930, guid: 12905ec7ab033e74a8e4412fc6e26d4a, type: 3}
       propertyPath: m_Layer
@@ -1833,5 +1833,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedWalk: 5
-  jumpForce: 8
+  jumpForce: 15
   isGround: 0
+  isCrouch: 0
