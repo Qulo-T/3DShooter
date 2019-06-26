@@ -11,51 +11,85 @@ public class PlayerMovement : MonoBehaviour
     private int speed;
     public float jumpForce;
     public bool isGround;
+    private Animator anim;
 
     void Awake()
     {
         player = (GameObject)this.gameObject;
+        anim = player.GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody>();
         speed = speedWalk;
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
 
-            speed = speedWalk * 2;
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            speed = speedWalk;
-        }
+        Run();
+        MoveForward();
+        MoveRight();
+        Jump();
 
 
-
+    }
+    private void MoveForward()
+    {
         if (Input.GetKey(KeyCode.W))
         {
             player.transform.position += player.transform.forward * speed * Time.deltaTime;
+            anim.SetBool("Walk", true);
         }
-        if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         {
             player.transform.position -= player.transform.forward * speedWalk * Time.deltaTime;
+            anim.SetBool("Walk", true);
         }
+        else
+        {
+            anim.ResetTrigger("Walk");
+            anim.SetBool("Walk", false);
+        }
+    }
+
+    private void MoveRight()
+    {
         if (Input.GetKey(KeyCode.A))
         {
             player.transform.position -= player.transform.right * speedWalk * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
             player.transform.position += player.transform.right * speedWalk * Time.deltaTime;
         }
-        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+    }
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            isGround = false;
-            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            if (isGround)
+            {
+                isGround = false;
+                rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            }
         }
+    }
+    private void Run()
+    {
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+            speed = speedWalk * 2;
+            anim.SetBool("Run", true);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = speedWalk;
+            anim.SetBool("Run", false);
+            anim.ResetTrigger("Run");
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision) //при необходимости прописать условие, что за коллвйдер вошел
